@@ -1,0 +1,17 @@
+[project]
+name = "starry"
+version = "0.1.0"
+description = "GitHub starred repos database & CLI search"
+requires-python = ">=3.12"
+dependencies = [
+    "click>=8.1",
+    "rich>=13.0",
+    "PyGithub>=2.1",
+]
+
+[project.scripts]
+starry = "starry.cli:cli"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

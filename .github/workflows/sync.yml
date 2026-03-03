@@ -1,0 +1,35 @@
+name: Sync Stars
+
+on:
+  schedule:
+    - cron: "0 0 */5 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Sync starred repos
+        env:
+          GITHUB_TOKEN: ${{ secrets.STARS_TOKEN }}
+        run: uv run starry sync
+
+      - name: Commit & push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add stars.db
+          git diff --cached --quiet || git commit -m "chore: sync starred repos $(date -u +%Y-%m-%d)"
+          git push
