@@ -1,6 +1,9 @@
 name: Sync Stars
 
 on:
+  push:
+    branches: [trunk]
+    paths: [".github/workflows/sync.yml"]
   schedule:
     - cron: "0 0 */5 * *"
   workflow_dispatch:
